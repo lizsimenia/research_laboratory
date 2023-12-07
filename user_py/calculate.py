@@ -1,38 +1,128 @@
 import random
 import time
 
-# import gen_by_mass
+def generate_mass(num, type_data):
+    '''Функция создания массива, возвращает время создания массива и массив'''
+    start_time, end_time = 0, 0
+    mass = []
+    if type_data == 'int':
+        start_time = time.time()
+        mass = [random.randint(1, 10) for i in range(num)]
+        end_time = time.time()
+        init = random.randint(1, 10)
+    elif type_data == 'float':
+        start_time = time.time()
+        mass = [random.uniform(1.0, 10.0) for i in range(num)]
+        end_time = time.time()
+        init = random.uniform(1.0, 10.0)
+    return end_time - start_time, mass, init
 
-def generate_mass(num):
-    '''Функция создания массива, время создания массива и массив'''
-    start_time = time.time()
-    mass = [random.randint(1, 10) for i in range(num)]
-    end_time = time.time()
-    return end_time - start_time, mass
 
-def sign_action(sign):
-    if sign_action == '+':
-        pass
-    elif sign_action == '-':
-        pass
-    else: pass
-
-
-def result_time(method, quantity, operation, type):
+def result_time(method, quantity, operation, type_data):
     if method == 'массив':
-        mass, mass_time = generate_mass(quantity)
-    elif method == 'переменные':
-        pass
+        mass_time, mass, init= generate_mass(quantity, type_data)
+        if operation == '+':
+            start_time = time.time()
+            for i in range(quantity):
+                init += mass[i]
+                if init >= 10**6:
+                    init = mass[i]
+            end_time = time.time()
+            #sum(mass)/quantity
 
-    # else:
-    #     pass
-    # c = 300*10**6
-    # summ = 1
-    # start_time = time.time()
-    # for i in range(c):
-    #     summ *= random.randint(1, 10)
-    #     if summ >= 10**6:
-    #         summ = 1
-    # end_time = time.time()
-    # print(summ, end_time-start_time)
-    return 1512.445, {"sr_znach_mass": 5, "summ_res": 52}
+        elif operation == '-':
+            start_time = time.time()
+            for i in range(quantity):
+                init -= mass[i]
+                if init <= -10**3:
+                    init = mass[i]
+            end_time = time.time()
+
+        elif operation == '*':
+            start_time = time.time()
+            for i in range(quantity):
+                init *= mass[i]
+                if init >= 10**6:
+                    init = mass[i]
+            end_time = time.time()
+
+        elif operation == '/':
+            start_time = time.time()
+            for i in range(quantity):
+                init /= mass[i]
+                if round(init) == 0:
+                    init = mass[i]
+            end_time = time.time()
+
+        return end_time - start_time, mass_time
+
+    elif method == 'переменные':
+        if type_data == 'int':
+            init = random.randint(1, 10)
+            if operation == '+':
+                start_time = time.time()
+                for _ in range(quantity):
+                    init += random.randint(1, 10)
+                    if init >= 10**6:
+                        init = random.randint(1, 10)
+                end_time = time.time()
+
+            elif operation == '-':
+                start_time = time.time()
+                for _ in range(quantity):
+                    init -= random.randint(1, 10)
+                    if init <= -10**3:
+                        init = random.randint(1, 10)
+                end_time = time.time()
+
+            elif operation == '*':
+                start_time = time.time()
+                for _ in range(quantity):
+                    init *= random.randint(1, 10)
+                    if init >= 10**6:
+                        init = random.randint(1, 10)
+                end_time = time.time()
+
+            elif operation == '/':
+                start_time = time.time()
+                for _ in range(quantity):
+                    init /= random.randint(1, 10)
+                    if round(init) == 0:
+                        init = random.randint(1, 10)
+                end_time = time.time()
+
+        elif type_data == 'float':
+            init = random.uniform(1.0, 10.0)
+            if operation == '+':
+                start_time = time.time()
+                for _ in range(quantity):
+                    init += random.uniform(1.0, 10.0)
+                    if init >= 10**6:
+                        init = random.uniform(1.0, 10.0)
+                end_time = time.time()
+
+            elif operation == '-':
+                start_time = time.time()
+                for _ in range(quantity):
+                    init -= random.uniform(1.0, 10.0)
+                    if init <= -10**3:
+                        init = random.uniform(1.0, 10.0)
+                end_time = time.time()
+
+            elif operation == '*':
+                start_time = time.time()
+                for _ in range(quantity):
+                    init *= random.uniform(1.0, 10.0)
+                    if init >= 10**6:
+                        init = random.uniform(1.0, 10.0)
+                    end_time = time.time()
+
+            elif operation == '/':
+                start_time = time.time()
+                for _ in range(quantity):
+                    init /= random.uniform(1.0, 10.0)
+                    if round(init) == 0:
+                        init = random.uniform(1.0, 10.0)
+                end_time = time.time()
+
+        return end_time - start_time, 'ff'
