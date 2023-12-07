@@ -82,18 +82,24 @@ class App(QWidget):
         if "Py" in self.language_cb.currentText():
             text = [str(i) for i in [self.quantity_input.text(), self.language_cb.currentText(),self.type_cb.currentText(), self.operation_cb.currentText(), self.generation_cb.currentText(), '---', 'Ошибка']]
             try:
-                if user_py.calculate.result_time(method=self.generation_cb.currentText(), quantity=int(self.quantity_input.text()), operation=self.operation_cb.currentText(), type = self.type_cb.currentText()):
+                info = user_py.calculate.result_time(method=self.generation_cb.currentText(), quantity=int(self.quantity_input.text()), operation=self.operation_cb.currentText(), type_data = self.type_cb.currentText())
+                if info:
                     text[-1] = "Завершено"
-                    text[-2] = str(user_py.calculate.result_time(0, 0, 0)[0])
-                    add_text = ['0', '2', '3']
-                    add_info = QTreeWidgetItem(add_text)
-                    with open('result.txt', 'a') as file:
-                        file.write(''.join(i for i in text) + 'ADD' + ''.join(i for i in add_text) +'\n')
-
+                    text[-2] = str(info[0])
                     item = QTreeWidgetItem(text)
                     self.tree.addTopLevelItem(item)
+                    #TODO название файла в переменную
+                    with open('results.txt', 'a', encoding = 'UTF-8') as file:
+                        file.write(' '.join(i for i in text))
 
-                    item.addChild(add_info)
+                    if self.generation_cb.currentText() == 'массив':
+                        add_text = ['Время генерации массива: ', str(info[1]), 'С учётом генерации:', str(info[1] + info[0])]
+                        add_info = QTreeWidgetItem(add_text)
+                        item.addChild(add_info)
+                        with open('results.txt', 'a', encoding = 'UTF-8') as file:
+                            file.write(' ADD:' + ' '.join(i for i in add_text) +'\n')
+
+
             except Exception:
                 item = QTreeWidgetItem(text)
                 self.tree.addTopLevelItem(item)
