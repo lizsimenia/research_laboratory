@@ -63,6 +63,8 @@ class App(QWidget):
     def active_button(self):
         if self.quantity_input.styleSheet() == "QLineEdit { background-color: white; }":
             self.calculate_button.setEnabled(True)
+        else:
+           self.calculate_button.setEnabled(False)
 
     def validate(self, text):
             input_field = self.sender()
@@ -75,6 +77,13 @@ class App(QWidget):
                     raise Exception
             except Exception:
                 input_field.setStyleSheet("QLineEdit { background-color: rgb(255, 200, 200); }")
+
+    def load(self):
+        with open('results.txt', 'r', encoding = 'UTF-8') as file:
+            for line in file:
+                #TODO вывод всей инфы в таблицу
+                main_info = line.split(' ')
+
 
     def calculate(self):
         num = '0'
@@ -93,14 +102,15 @@ class App(QWidget):
                         file.write(' '.join(i for i in text))
 
                     if self.generation_cb.currentText() == 'массив':
-                        add_text = ['Время генерации массива: ', str(info[1]), 'С учётом генерации:', str(info[1] + info[0])]
+                        add_text = ['Время генерации массива: ', str(info[1]), 'С учётом генерации:', str(info[1] + info[0]), "Результат вычислений: ", str(info[3])] #"Массив:", str(info[2])
                         add_info = QTreeWidgetItem(add_text)
                         item.addChild(add_info)
                         with open('results.txt', 'a', encoding = 'UTF-8') as file:
                             file.write(' ADD:' + ' '.join(i for i in add_text) +'\n')
 
 
-            except Exception:
+            except Exception as exp:
+                text[-1] = str(exp)
                 item = QTreeWidgetItem(text)
                 self.tree.addTopLevelItem(item)
 
