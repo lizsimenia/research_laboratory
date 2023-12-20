@@ -4,6 +4,8 @@ import time
 import sys
 
 import user_py.calculate
+# import user_Cplus.calculate
+
 import choose
 
 class App(QWidget):
@@ -17,10 +19,11 @@ class App(QWidget):
         self.language_cb = QComboBox()
         self.language_cb.addItems(choose.languages)
 
-        #TODO типы данных зависят от яп
         self.type_label = QLabel("Тип данных:")
         self.type_cb = QComboBox()
-        self.type_cb.addItems(choose.type)
+        self.type_cb.addItems(choose.types_by_language[self.language_cb.currentText()])
+
+        self.language_cb.currentTextChanged.connect(self.on_language_changed)
 
         self.operation_label = QLabel('Операция:')
         self.operation_cb = QComboBox()
@@ -60,6 +63,10 @@ class App(QWidget):
 
         self.setLayout(self.vbox)
         self.load()
+
+    def on_language_changed(self, language):
+        self.type_cb.clear()
+        self.type_cb.addItems(choose.types_by_language[language])
 
     def active_button(self):
         if self.quantity_input.styleSheet() == "QLineEdit { background-color: white; }":
