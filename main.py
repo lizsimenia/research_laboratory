@@ -59,6 +59,7 @@ class App(QWidget):
         self.vbox.addWidget(self.tree)
 
         self.setLayout(self.vbox)
+        self.load()
 
     def active_button(self):
         if self.quantity_input.styleSheet() == "QLineEdit { background-color: white; }":
@@ -79,15 +80,23 @@ class App(QWidget):
                 input_field.setStyleSheet("QLineEdit { background-color: rgb(255, 200, 200); }")
 
     def load(self):
+        index_ADD = 8
         with open('results.txt', 'r', encoding = 'UTF-8') as file:
             for line in file:
-                #TODO вывод всей инфы в таблицу
-                main_info = line.split(' ')
+                text = line.strip().split('  ')
+                main = text[:index_ADD]
+                item = QTreeWidgetItem(main)
+                self.tree.addTopLevelItem(item)
+
+                if 'ADD:' in text:
+                    add_text = text[index_ADD+1:]
+                    add_info = QTreeWidgetItem(add_text)
+                    item.addChild(add_info)
+
+                self.vbox.addWidget(self.tree)
 
 
     def calculate(self):
-        num = '0'
-        #TODO нумерация
         if "Py" in self.language_cb.currentText():
             text = [str(i) for i in [self.quantity_input.text(), self.language_cb.currentText(),self.type_cb.currentText(), self.operation_cb.currentText(), self.generation_cb.currentText(), '---', '---', 'Ошибка']]
             try:
@@ -102,15 +111,17 @@ class App(QWidget):
                     item = QTreeWidgetItem(text)
                     self.tree.addTopLevelItem(item)
                     #TODO название файла в переменную
-                    with open('results.txt', 'a', encoding = 'UTF-8') as file:
-                        file.write(' '.join(i for i in text))
 
                     if self.generation_cb.currentText() == 'массив':
                         add_text = ['Время генерации массива: ', str(info[1]), 'С учётом генерации:', str(info[1] + info[0])] #"Массив:", str(info[2])
                         add_info = QTreeWidgetItem(add_text)
                         item.addChild(add_info)
+
                         with open('results.txt', 'a', encoding = 'UTF-8') as file:
-                            file.write(' ADD:' + ' '.join(i for i in add_text) +'\n')
+                            file.write('  '.join(i for i in text) +'  ADD:  ' + ' '.join(i for i in add_text) +'\n')
+                    else:
+                        with open('results.txt', 'a', encoding = 'UTF-8') as file:
+                            file.write('  '.join(i for i in text)+'\n')
 
 
             except Exception as exp:
