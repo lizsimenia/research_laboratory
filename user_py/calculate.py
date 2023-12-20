@@ -1,11 +1,6 @@
 import random
 import time
 
-#TODO генерировать обратные для умножения float; генерировать маленькие для int
-#TODO выводить результаты вычисления
-#TODO генерировать положительные и отрицательные для сложения
-
-
 def generate_mass(num, type_data, operation):
     '''Функция создания массива, возвращает время создания массива и массив'''
     start_time, end_time = 0, 0
@@ -15,184 +10,194 @@ def generate_mass(num, type_data, operation):
             start_time = time.time()
             mass = [random.randint(2, 3) for i in range(num)]
             end_time = time.time()
-            init = random.randint(2, 3)
 
         elif operation == "-":
             start_time = time.time()
-            mass = [random.randint(-5, 6) for i in range(num)]
+            mass = [random.randint(-5, 10) for i in range(num)]
             end_time = time.time()
-            init = random.randint(-5, 6)
 
         elif operation == "/":
             start_time = time.time()
-            mass = [random.randint(1, 10) for i in range(num//2)]
+            mass = [random.randint(2,3) for i in range(num)]
             end_time = time.time()
-            init = random.randint(1, 10)
 
     elif type_data == 'float':
-        start_time = time.time()
-        mass = [random.uniform(1.0, 10.0) for i in range(num)]
-        end_time = time.time()
-        init = random.uniform(1.0, 10.0)
+        if operation == "+" or operation == "*":
+            start_time = time.time()
+            mass = [random.uniform(2.0, 3.0) for i in range(num)]
+            end_time = time.time()
 
-    return end_time - start_time, mass, init
+        elif operation == "-":
+            start_time = time.time()
+            mass = [random.uniform(-5.0, 6.0) for i in range(num)]
+            end_time = time.time()
+
+        elif operation == "/":
+            start_time = time.time()
+            mass = [random.uniform(2.0,3.0) for i in range(num//2)]
+            mass.extend([1/j for j in mass])
+            if num%2 != 0:
+                mass.append(random.uniform(2.0,3.0))
+            end_time = time.time()
+    return end_time - start_time, mass
 
 
 def result_time(method, quantity, operation, type_data):
     if method == 'массив':
-        mass_time, mass, init= generate_mass(quantity, type_data, operation)
-
+        mass_time, mass = generate_mass(quantity, type_data, operation)
         if operation == '+':
-            res = 0
+            res = mass[0]
             start_time = time.time()
-            for i in range(quantity):
+            for i in range(1, quantity):
                 res += mass[i]
             end_time = time.time()
 
         elif operation == '-':
-            res = 10**6
+            res = mass[0]
             start_time = time.time()
-            for i in range(quantity):
+            for i in range(1, quantity):
                 res -= mass[i]
             end_time = time.time()
 
-        elif operation == '/':
-            #TODO: доделать чтобы не получать ноль
-            res = 10**6
+        elif operation == '/' and type_data == 'int':
+            res = mass[0]
+            count = 0
+            add = 0
             start_time = time.time()
-            for i in range(quantity//2):
-                res //= mass[i]
-                res //= mass[i]
-            add = quantity-quantity//2
-            if add != 0:
-                for i in range(add):
-                    res //= mass[0]
+            for i in range(1, quantity):
+                res /= mass[i]
+                if res <= 10**(-6):
+                    add += 10**(-6) - res
+                    count += 1
+                    res = mass[i]
             end_time = time.time()
+            if res == mass[i]:
+                res = 0
+            res = '{:.03e}'.format(add + res + count*10**(-6))
+
+        elif operation == '/' and type_data == 'float':
+            res = mass[0]
+            start_time = time.time()
+            for i in range(1, quantity//2):
+                res /= mass[i]
+                res /= mass[quantity//2 + i]
+            if quantity%2!=0:
+                res /= mass[-1]
+            end_time = time.time()
+            res = '{:.03e}'.format(res)
 
         elif operation == '*':
-            res = 1
+            res = mass[0]
             millions = 0
+            add = 0
             start_time = time.time()
-            for i in range(quantity):
+            for i in range(1, quantity):
                 res *= mass[i]
-                if res > 10**6:
-                    res = 1
+                if res >= 10**6:
+                    add += res - 10**6
+                    res = mass[i]
                     millions += 1
             end_time = time.time()
-            res = '{:.03e}'.format(millions*10**6)
+            if res == 2 or res == 3:
+                    res = 0
+            res = '{:.03e}'.format(add + res + millions*10**6)
 
         return end_time-start_time, mass_time, mass, res
 
-
-
-        # elif operation == '*' and type_data == 'int':
-        #     #TODO генерация маленьких чисел
-        #     pass
-        # elif operation == '*' and type_data == 'float':
-        #     #TODO генерация малельньких чисел и обратные им
-        #     pass
-        # elif operation == '/' and type_data == 'int':
-        #     #TODO
-        #     pass
-        # elif operation == '/' and type_data == 'float':
-        #     #TODO
-        #     pass
-
-
-
-        # elif operation == '-':
-        #     start_time = time.time()
-        #     for i in range(quantity):
-        #         init -= mass[i]
-        #         if init <= -10**3:
-        #             init = mass[i]
-        #     end_time = time.time()
-
-        # elif operation == '*':
-        #     start_time = time.time()
-        #     for i in range(quantity):
-        #         init *= mass[i]
-        #         if init >= 10**6:
-        #             init = mass[i]
-        #     end_time = time.time()
-
-        # elif operation == '/':
-        #     start_time = time.time()
-        #     for i in range(quantity):
-        #         init /= mass[i]
-        #         if round(init) == 0:
-        #             init = mass[i]
-        #     end_time = time.time()
-
-        # return end_time - start_time, mass_time, init
-
     elif method == 'переменные':
+
         if type_data == 'int':
-            init = random.randint(1, 10)
             if operation == '+':
+                res = 0
                 start_time = time.time()
-                for _ in range(quantity):
-                    init += random.randint(1, 10)
-                    if init >= 10**6:
-                        init = random.randint(1, 10)
+                for i in range(quantity):
+                    res += random.randint(2, 3)
                 end_time = time.time()
 
             elif operation == '-':
+                res =  random.randint(-5, 10)
                 start_time = time.time()
-                for _ in range(quantity):
-                    init -= random.randint(1, 10)
-                    if init <= -10**3:
-                        init = random.randint(1, 10)
-                end_time = time.time()
-
-            elif operation == '*':
-                start_time = time.time()
-                for _ in range(quantity):
-                    init *= random.randint(1, 10)
-                    if init >= 10**6:
-                        init = random.randint(1, 10)
+                for i in range(1, quantity):
+                    res -= random.randint(-5, 10)
                 end_time = time.time()
 
             elif operation == '/':
+                res = random.randint(2,3)
+                count = 0
+                add = 0
                 start_time = time.time()
-                for _ in range(quantity):
-                    init /= random.randint(1, 10)
-                    if round(init) == 0:
-                        init = random.randint(1, 10)
+                for i in range(1, quantity):
+                    res /= random.randint(2,3)
+                    if res <= 10**(-6):
+                        add += 10**(-6) - res
+                        count += 1
+                        res = random.randint(2,3)
                 end_time = time.time()
+                if res == 2 or res == 3:
+                    res = 0
+                res = '{:.03e}'.format(add + res + count*10**(-6))
+
+            elif operation == '*':
+                res = random.randint(2, 3)
+                millions = 0
+                add = 0
+                start_time = time.time()
+                for i in range(1, quantity):
+                    res *= random.randint(2, 3)
+                    if res >= 10**6:
+                        add += res - 10**6
+                        res = random.randint(2, 3)
+                        millions += 1
+                end_time = time.time()
+                if res == 2 or res == 3:
+                    res = 0
+                res = '{:.03e}'.format(add + res + millions*10**6)
 
         elif type_data == 'float':
-            init = random.uniform(1.0, 10.0)
             if operation == '+':
+                res = 0
                 start_time = time.time()
-                for _ in range(quantity):
-                    init += random.uniform(1.0, 10.0)
-                    if init >= 10**6:
-                        init = random.uniform(1.0, 10.0)
+                for i in range(quantity):
+                    res += random.uniform(2.0, 3.0)
                 end_time = time.time()
 
             elif operation == '-':
+                res =  random.uniform(-5.0, 10.0)
                 start_time = time.time()
-                for _ in range(quantity):
-                    init -= random.uniform(1.0, 10.0)
-                    if init <= -10**3:
-                        init = random.uniform(1.0, 10.0)
+                for i in range(1, quantity):
+                    res -= random.uniform(-5.0, 10.0)
                 end_time = time.time()
-
-            elif operation == '*':
-                start_time = time.time()
-                for _ in range(quantity):
-                    init *= random.uniform(1.0, 10.0)
-                    if init >= 10**6:
-                        init = random.uniform(1.0, 10.0)
-                    end_time = time.time()
 
             elif operation == '/':
+                res = random.uniform(2.0,3.0)
+                count = 0
+                add = 0
                 start_time = time.time()
-                for _ in range(quantity):
-                    init /= random.uniform(1.0, 10.0)
-                    if round(init) == 0:
-                        init = random.uniform(1.0, 10.0)
+                for i in range(1, quantity):
+                    res /= random.uniform(2.0,3.0)
+                    if res <= 10**(-6):
+                        add += 10**(-6) - res
+                        count += 1
+                        res = random.uniform(2.0,3.0)
                 end_time = time.time()
+                if 3.0>=res>=2.0:
+                    res = 0
+                res = '{:.03e}'.format(add + res + count*10**(-6))
 
-        return end_time - start_time, init
+            elif operation == '*':
+                res = random.uniform(2.0,3.0)
+                millions = 0
+                add = 0
+                start_time = time.time()
+                for i in range(1, quantity):
+                    res *= random.uniform(2.0,3.0)
+                    if res >= 10**6:
+                        add += res - 10**6
+                        res = random.uniform(2.0,3.0)
+                        millions += 1
+                end_time = time.time()
+                if 3.0>=res>=2.0:
+                    res = 0
+                res = '{:.03e}'.format(add + res + millions*10**6)
+
+        return end_time - start_time, res
