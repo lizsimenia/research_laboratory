@@ -70,7 +70,7 @@ class App(QWidget):
             input_field = self.sender()
             try:
                 num = float(text)
-                if num == int(num):
+                if num == int(num) and int(num) <= 200*10**6:
                     input_field.setStyleSheet("QLineEdit { background-color: white; }")
                     return 1
                 else:
@@ -89,12 +89,16 @@ class App(QWidget):
         num = '0'
         #TODO нумерация
         if "Py" in self.language_cb.currentText():
-            text = [str(i) for i in [self.quantity_input.text(), self.language_cb.currentText(),self.type_cb.currentText(), self.operation_cb.currentText(), self.generation_cb.currentText(), '---', 'Ошибка']]
+            text = [str(i) for i in [self.quantity_input.text(), self.language_cb.currentText(),self.type_cb.currentText(), self.operation_cb.currentText(), self.generation_cb.currentText(), '---', '---', 'Ошибка']]
             try:
                 info = user_py.calculate.result_time(method=self.generation_cb.currentText(), quantity=int(self.quantity_input.text()), operation=self.operation_cb.currentText(), type_data = self.type_cb.currentText())
                 if info:
                     text[-1] = "Завершено"
-                    text[-2] = str(info[0])
+                    if self.generation_cb.currentText() == 'переменные':
+                        text[-2] =  str(info[1])
+                    else:
+                        text[-2] =  str(info[3])
+                    text[-3] = str(info[0])
                     item = QTreeWidgetItem(text)
                     self.tree.addTopLevelItem(item)
                     #TODO название файла в переменную
@@ -102,7 +106,7 @@ class App(QWidget):
                         file.write(' '.join(i for i in text))
 
                     if self.generation_cb.currentText() == 'массив':
-                        add_text = ['Время генерации массива: ', str(info[1]), 'С учётом генерации:', str(info[1] + info[0]), "Результат вычислений: ", str(info[3])] #"Массив:", str(info[2])
+                        add_text = ['Время генерации массива: ', str(info[1]), 'С учётом генерации:', str(info[1] + info[0])] #"Массив:", str(info[2])
                         add_info = QTreeWidgetItem(add_text)
                         item.addChild(add_info)
                         with open('results.txt', 'a', encoding = 'UTF-8') as file:
@@ -119,6 +123,6 @@ class App(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = App()
-    ex.resize(600, 600)
+    ex.resize(1200, 600)
     ex.show()
     sys.exit(app.exec_())
