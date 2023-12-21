@@ -94,18 +94,52 @@ pair<double, vector<int>> generate_mass(int num, string type_data, string operat
     return make_pair(end_time - start_time, mass);
 }
 
-int main()
-{
-    pair<double, vector<int>> result = generate_mass(100, "int", "+");
+pair<double, double> result_time(string method, int quantity, string operation, string type_data){
+    double start_time, end_time, res;
 
-    double mass = result.first;
-    vector<int> vector_int = result.second;
+    if (method == "массив")
+    {
+        double mass_time = generate_mass(quantity, type_data, operation).first;
+        vector mass = generate_mass(quantity, type_data, operation).second;
+    if (operation == "+")
+    {
+        res = mass[0];
+        start_time = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
 
-    cout << "Mass: " << mass << endl;
-    cout << "Vector int: {";
-    for (int x : vector_int) {
-        cout << x << ", ";
+         for (int i = 1; i < quantity; i++) {
+            res += mass[i];
+        }
+
+         end_time = chrono::duration_cast<chrono::milliseconds>(chrono::system_clock::now().time_since_epoch()).count();
+
+
     }
-    cout << "}" << endl;
-    return 0;
-}
+    }
+        // res = mass[0]
+        // start_time = time.time()
+        // for i in range(1, quantity):
+        //     res += mass[i]
+        // end_time = time.time()
+
+    // }
+
+//     else if (method == "переменные")
+
+// }
+
+
+// int main()
+// {
+//     pair<double, vector<int>> result = generate_mass(100, "int", "+");
+
+//     double mass = result.first;
+//     vector<int> vector_int = result.second;
+
+//     cout << "Mass: " << mass << endl;
+//     cout << "Vector int: {";
+//     for (int x : vector_int) {
+//         cout << x << ", ";
+//     }
+//     cout << "}" << endl;
+//     return 0;
+// }
