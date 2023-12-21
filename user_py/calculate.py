@@ -1,13 +1,14 @@
 import random
 import time
 import math
+from typing import List, Tuple, Dict, Set, Any
 
-def generate_mass(num, type_data, operation):
+def generate_mass(num:int, type_data:str, operation:str):
     '''Функция создания массива, возвращает время создания массива и массив'''
     start_time, end_time = 0, 0
     mass = []
     if type_data == 'int':
-        if operation == "+" or operation == "*":
+        if operation == "+" or operation == "*" or  operation == '/':
             start_time = time.time()
             mass = [random.randint(2, 3) for i in range(num)]
             end_time = time.time()
@@ -17,18 +18,13 @@ def generate_mass(num, type_data, operation):
             mass = [random.randint(-5, 10) for i in range(num)]
             end_time = time.time()
 
-        elif operation == "/":
-            start_time = time.time()
-            mass = [random.randint(2,3) for i in range(num)]
-            end_time = time.time()
-
         elif operation == 'log' or operation == 'sqrt':
             start_time = time.time()
             mass = [random.randint(10, 20) for i in range(num)]
             end_time = time.time()
 
     elif type_data == 'float':
-        if operation == "+" or operation == "*":
+        if operation == "+":
             start_time = time.time()
             mass = [random.uniform(2.0, 3.0) for i in range(num)]
             end_time = time.time()
@@ -38,7 +34,7 @@ def generate_mass(num, type_data, operation):
             mass = [random.uniform(-5.0, 6.0) for i in range(num)]
             end_time = time.time()
 
-        elif operation == "/":
+        elif operation == "/" or operation == "*":
             start_time = time.time()
             mass = [random.uniform(2.0,3.0) for i in range(num//2)]
             mass.extend([1/j for j in mass])
@@ -79,13 +75,13 @@ def result_time(method, quantity, operation, type_data):
             for i in range(1, quantity):
                 res /= mass[i]
                 if res <= 10**(-6):
-                    add += 10**(-6) - res
+                    add /= 10**(-6) - res
                     count += 1
                     res = mass[i]
             end_time = time.time()
             if res == mass[i]:
                 res = 0
-            res = '{:.03e}'.format(add + res + count*10**(-6))
+            res = f'{add}+10**(-6)/10**{-6**count}'
 
         elif operation == '/' and type_data == 'float':
             res = mass[0]
@@ -98,7 +94,7 @@ def result_time(method, quantity, operation, type_data):
             end_time = time.time()
             res = '{:.03e}'.format(res)
 
-        elif operation == '*':
+        elif operation == '*' and type_data == 'int':
             res = mass[0]
             millions = 0
             add = 0
@@ -106,13 +102,24 @@ def result_time(method, quantity, operation, type_data):
             for i in range(1, quantity):
                 res *= mass[i]
                 if res >= 10**6:
-                    add += res - 10**6
+                    add *= res - 10**6
                     res = mass[i]
                     millions += 1
             end_time = time.time()
             if res == 2 or res == 3:
-                    res = 0
-            res = '{:.03e}'.format(add + res + millions*10**6)
+                res = 0
+            res =f'{add + res} + (10**{6*millions}'
+
+        elif operation == '*' and type_data == 'float':
+            res = mass[0]
+            start_time = time.time()
+            for i in range(1, quantity//2):
+                res *= mass[i]
+                res *= mass[quantity//2 + i]
+            if quantity%2!=0:
+                res *= mass[-1]
+            end_time = time.time()
+            res = '{:.03e}'.format(res)
 
         elif operation == 'log':
             res = mass[0]
@@ -161,7 +168,7 @@ def result_time(method, quantity, operation, type_data):
                 end_time = time.time()
                 if res == 2 or res == 3:
                     res = 0
-                res = '{:.03e}'.format(add + res + count*10**(-6))
+                res = f'{add}+10**(-6)/10**{-6*count}'
 
             elif operation == '*':
                 res = random.randint(2, 3)
@@ -177,7 +184,7 @@ def result_time(method, quantity, operation, type_data):
                 end_time = time.time()
                 if res == 2 or res == 3:
                     res = 0
-                res = '{:.03e}'.format(add + res + millions*10**6)
+                res = f'{add + res} + (10**{6*millions}'
 
             elif operation == 'log':
                 res = random.randint(10, 20)
@@ -209,36 +216,26 @@ def result_time(method, quantity, operation, type_data):
                 end_time = time.time()
 
             elif operation == '/':
-                res = random.uniform(2.0,3.0)
-                count = 0
-                add = 0
+                res =  random.uniform(2.0,3.0)
                 start_time = time.time()
-                for i in range(1, quantity):
+                for i in range(1, quantity//2):
                     res /= random.uniform(2.0,3.0)
-                    if res <= 10**(-6):
-                        add += 10**(-6) - res
-                        count += 1
-                        res = random.uniform(2.0,3.0)
+                    res /= (1/random.uniform(2.0,3.0))
+                if quantity%2!=0:
+                    res /= random.uniform(2.0,3.0)
                 end_time = time.time()
-                if 3.0>=res>=2.0:
-                    res = 0
-                res = '{:.03e}'.format(add + res + count*10**(-6))
+                res = '{:.03e}'.format(res)
 
             elif operation == '*':
                 res = random.uniform(2.0,3.0)
-                millions = 0
-                add = 0
                 start_time = time.time()
-                for i in range(1, quantity):
+                for i in range(1, quantity//2):
                     res *= random.uniform(2.0,3.0)
-                    if res >= 10**6:
-                        add += res - 10**6
-                        res = random.uniform(2.0,3.0)
-                        millions += 1
+                    res *= (1/random.uniform(2.0,3.0))
+                if quantity%2!=0:
+                    res *= random.uniform(2.0,3.0)
                 end_time = time.time()
-                if 3.0>=res>=2.0:
-                    res = 0
-                res = '{:.03e}'.format(add + res + millions*10**6)
+                res = '{:.03e}'.format(res)
 
             elif operation == 'log':
                 res = random.uniform(10.0, 20.0)
