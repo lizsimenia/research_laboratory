@@ -112,15 +112,16 @@ class App(QWidget):
                     text[-1] = "Завершено"
                     if self.generation_cb.currentText() == 'переменные':
                         text[-2] =  str(info[1])
+                        text[-3] = str(info[0])
                     else:
                         text[-2] =  str(info[3])
-                    text[-3] = str(info[0])
+                        text[-3] = str(info[1] + info[0])
                     item = QTreeWidgetItem(text)
                     self.tree.addTopLevelItem(item)
                     #TODO название файла в переменную
 
                     if self.generation_cb.currentText() == 'массив':
-                        add_text = ['Время генерации массива: ', str(info[1]), 'С учётом генерации:', str(info[1] + info[0])] #"Массив:", str(info[2])
+                        add_text = ['Время генерации массива: ', str(info[1]), 'Время подсчёта:', str(info[0])] #"Массив:", str(info[2])
                         add_info = QTreeWidgetItem(add_text)
                         item.addChild(add_info)
 

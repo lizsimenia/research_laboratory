@@ -22,7 +22,7 @@ def generate_mass(num, type_data, operation):
             mass = [random.randint(2,3) for i in range(num)]
             end_time = time.time()
 
-        elif operation == 'log':
+        elif operation == 'log' or operation == 'sqrt':
             start_time = time.time()
             mass = [random.randint(10, 20) for i in range(num)]
             end_time = time.time()
@@ -46,7 +46,7 @@ def generate_mass(num, type_data, operation):
                 mass.append(random.uniform(2.0,3.0))
             end_time = time.time()
 
-        elif operation == 'log':
+        elif operation == 'log' or  operation == 'sqrt':
             start_time = time.time()
             mass = [random.uniform(10.0, 20.0) for i in range(num)]
             end_time = time.time()
@@ -121,6 +121,13 @@ def result_time(method, quantity, operation, type_data):
                 res = math.log(mass[i])
             end_time = time.time()
 
+        elif operation == 'sqrt':
+            res = mass[0]
+            start_time = time.time()
+            for i in range(1, quantity):
+                res = math.sqrt(mass[i])
+            end_time = time.time()
+
         return end_time-start_time, mass_time, mass, res
 
     elif method == 'переменные':
@@ -179,6 +186,13 @@ def result_time(method, quantity, operation, type_data):
                     res = math.log(random.randint(10, 20))
                 end_time = time.time()
 
+            elif operation == 'sqrt':
+                res = random.randint(10, 20)
+                start_time = time.time()
+                for i in range(1, quantity):
+                    res = math.sqrt(random.randint(10, 20))
+                end_time = time.time()
+
         elif type_data == 'float':
             if operation == '+':
                 res = 0
@@ -231,6 +245,13 @@ def result_time(method, quantity, operation, type_data):
                 start_time = time.time()
                 for i in range(1, quantity):
                     res = math.log(random.uniform(10.0, 20.0))
+                end_time = time.time()
+
+            elif operation == 'sqrt':
+                res = random.uniform(10.0, 20.0)
+                start_time = time.time()
+                for i in range(1, quantity):
+                    res = math.sqrt(random.uniform(10.0, 20.0))
                 end_time = time.time()
 
         return end_time - start_time, res
