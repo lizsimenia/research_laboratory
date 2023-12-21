@@ -137,6 +137,8 @@ def result_time(method, quantity, operation, type_data):
                     res = 0
                 res = '{:.03e}'.format(add + res + count*10**(-6))
 
+
+
             elif operation == '*':
                 res = random.randint(2, 3)
                 millions = 0
@@ -199,5 +201,6 @@ def result_time(method, quantity, operation, type_data):
                 if 3.0>=res>=2.0:
                     res = 0
                 res = '{:.03e}'.format(add + res + millions*10**6)
+
 
         return end_time - start_time, res
