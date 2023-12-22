@@ -108,7 +108,7 @@ def result_time(method, quantity, operation, type_data):
             end_time = time.time()
             if res == 2 or res == 3:
                 res = 0
-            res =f'{add + res} + (10**{6*millions}'
+            res =f'{add + res} + (10**{6*millions})'
 
         elif operation == '*' and type_data == 'float':
             res = mass[0]
@@ -178,13 +178,13 @@ def result_time(method, quantity, operation, type_data):
                 for i in range(1, quantity):
                     res *= random.randint(2, 3)
                     if res >= 10**6:
-                        add += res - 10**6
+                        add *= res - 10**6
                         res = random.randint(2, 3)
                         millions += 1
                 end_time = time.time()
                 if res == 2 or res == 3:
                     res = 0
-                res = f'{add + res} + (10**{6*millions}'
+                res = f'{add + res} + (10**{6*millions})'
 
             elif operation == 'log':
                 res = random.randint(10, 20)
@@ -230,8 +230,9 @@ def result_time(method, quantity, operation, type_data):
                 res = random.uniform(2.0,3.0)
                 start_time = time.time()
                 for i in range(1, quantity//2):
-                    res *= random.uniform(2.0,3.0)
-                    res *= (1/random.uniform(2.0,3.0))
+                    a = random.uniform(2.0,3.0)
+                    res *= a
+                    res *= (1/a)
                 if quantity%2!=0:
                     res *= random.uniform(2.0,3.0)
                 end_time = time.time()
