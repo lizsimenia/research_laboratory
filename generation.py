@@ -56,11 +56,11 @@ for i in range(200*10**6, 10**6, -10*10**6):
 
 
         main_app.language_cb.setCurrentText('Python')
-        # main_app.type_cb.setCurrentText('int')
+        main_app.type_cb.setCurrentText('int')
         main_app.operation_cb.setCurrentText('+')
         main_app.generation_cb.setCurrentText('переменные')
         main_app.quantity_input.setText(str(i))
-        # main_app.calculate()
+        main_app.calculate()
 
         main_app.operation_cb.setCurrentText('-')
         main_app.calculate()
