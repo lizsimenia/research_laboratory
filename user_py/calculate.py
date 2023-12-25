@@ -8,9 +8,14 @@ def generate_mass(num:int, type_data:str, operation:str):
     start_time, end_time = 0, 0
     mass = []
     if type_data == 'int':
-        if operation == "+" or operation == "*" or  operation == '/':
+        if operation == "+" or  operation == '/':
             start_time = time.time()
             mass = [random.randint(2, 3) for i in range(num)]
+            end_time = time.time()
+
+        elif operation == "*" :
+            start_time = time.time()
+            mass = [random.randint(0, 3) for i in range(num)]
             end_time = time.time()
 
         elif operation == "-":
@@ -31,7 +36,7 @@ def generate_mass(num:int, type_data:str, operation:str):
 
         elif operation == "-":
             start_time = time.time()
-            mass = [random.uniform(-5.0, 6.0) for i in range(num)]
+            mass = [random.uniform(-5.0, 10.0) for i in range(num)]
             end_time = time.time()
 
         elif operation == "/" or operation == "*":
@@ -69,19 +74,10 @@ def result_time(method, quantity, operation, type_data):
 
         elif operation == '/' and type_data == 'int':
             res = mass[0]
-            count = 0
-            add = 0
             start_time = time.time()
             for i in range(1, quantity):
                 res /= mass[i]
-                if res <= 10**(-6):
-                    add /= 10**(-6) - res
-                    count += 1
-                    res = mass[i]
             end_time = time.time()
-            if res == mass[i]:
-                res = 0
-            res = f'{add}+10**(-6)/10**{-6**count}'
 
         elif operation == '/' and type_data == 'float':
             res = mass[0]
@@ -96,19 +92,10 @@ def result_time(method, quantity, operation, type_data):
 
         elif operation == '*' and type_data == 'int':
             res = mass[0]
-            millions = 0
-            add = 0
             start_time = time.time()
             for i in range(1, quantity):
                 res *= mass[i]
-                if res >= 10**6:
-                    add *= res - 10**6
-                    res = mass[i]
-                    millions += 1
             end_time = time.time()
-            if res == 2 or res == 3:
-                res = 0
-            res =f'{add + res} + (10**{6*millions})'
 
         elif operation == '*' and type_data == 'float':
             res = mass[0]
@@ -161,30 +148,14 @@ def result_time(method, quantity, operation, type_data):
                 start_time = time.time()
                 for i in range(1, quantity):
                     res /= random.randint(2,3)
-                    if res <= 10**(-6):
-                        add += 10**(-6) - res
-                        count += 1
-                        res = random.randint(2,3)
                 end_time = time.time()
-                if res == 2 or res == 3:
-                    res = 0
-                res = f'{add}+10**(-6)/10**{-6*count}'
 
             elif operation == '*':
-                res = random.randint(2, 3)
-                millions = 0
-                add = 0
+                res = random.randint(0, 3)
                 start_time = time.time()
                 for i in range(1, quantity):
-                    res *= random.randint(2, 3)
-                    if res >= 10**6:
-                        add *= res - 10**6
-                        res = random.randint(2, 3)
-                        millions += 1
+                    res *= random.randint(0, 3)
                 end_time = time.time()
-                if res == 2 or res == 3:
-                    res = 0
-                res = f'{add + res} + (10**{6*millions})'
 
             elif operation == 'log':
                 res = random.randint(10, 20)
