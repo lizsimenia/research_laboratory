@@ -15,7 +15,7 @@ def generate_mass(num:int, type_data:str, operation:str):
 
         elif operation == "*" :
             start_time = time.time()
-            mass = [random.randint(0, 3) for i in range(num)]
+            mass = [random.randint(2, 3) for i in range(num)]
             end_time = time.time()
 
         elif operation == "-":
@@ -41,10 +41,10 @@ def generate_mass(num:int, type_data:str, operation:str):
 
         elif operation == "/" or operation == "*":
             start_time = time.time()
-            mass = [random.uniform(2.0,3.0) for i in range(num//2)]
-            mass.extend([1/j for j in mass])
-            if num%2 != 0:
-                mass.append(random.uniform(2.0,3.0))
+            mass = [random.uniform(2.0,3.0) for i in range(num)]
+            # mass.extend([1/j for j in mass])
+            # if num%2 != 0:
+            #     mass.append(random.uniform(2.0,3.0))
             end_time = time.time()
 
         elif operation == 'log' or  operation == 'sqrt':
@@ -82,11 +82,11 @@ def result_time(method, quantity, operation, type_data):
         elif operation == '/' and type_data == 'float':
             res = mass[0]
             start_time = time.time()
-            for i in range(1, quantity//2):
+            for i in range(1, quantity):
                 res /= mass[i]
-                res /= mass[quantity//2 + i]
-            if quantity%2!=0:
-                res /= mass[-1]
+            #     res /= mass[quantity//2 + i]
+            # if quantity%2!=0:
+            #     res /= mass[-1]
             end_time = time.time()
             res = '{:.03e}'.format(res)
 
@@ -100,11 +100,11 @@ def result_time(method, quantity, operation, type_data):
         elif operation == '*' and type_data == 'float':
             res = mass[0]
             start_time = time.time()
-            for i in range(1, quantity//2):
+            for i in range(1, quantity):
                 res *= mass[i]
-                res *= mass[quantity//2 + i]
-            if quantity%2!=0:
-                res *= mass[-1]
+                # res *= mass[quantity//2 + i]
+            # if quantity%2!=0:
+            #     res *= mass[-1]
             end_time = time.time()
             res = '{:.03e}'.format(res)
 
@@ -189,23 +189,23 @@ def result_time(method, quantity, operation, type_data):
             elif operation == '/':
                 res =  random.uniform(2.0,3.0)
                 start_time = time.time()
-                for i in range(1, quantity//2):
+                for i in range(1, quantity):
                     res /= random.uniform(2.0,3.0)
-                    res /= (1/random.uniform(2.0,3.0))
-                if quantity%2!=0:
-                    res /= random.uniform(2.0,3.0)
+                #     res /= (1/random.uniform(2.0,3.0))
+                # if quantity%2!=0:
+                #     res /= random.uniform(2.0,3.0)
                 end_time = time.time()
                 res = '{:.03e}'.format(res)
 
             elif operation == '*':
                 res = random.uniform(2.0,3.0)
                 start_time = time.time()
-                for i in range(1, quantity//2):
+                for i in range(1, quantity):
                     a = random.uniform(2.0,3.0)
-                    res *= a
-                    res *= (1/a)
-                if quantity%2!=0:
-                    res *= random.uniform(2.0,3.0)
+                #     res *= a
+                #     res *= (1/a)
+                # if quantity%2!=0:
+                #     res *= random.uniform(2.0,3.0)
                 end_time = time.time()
                 res = '{:.03e}'.format(res)
 
