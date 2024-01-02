@@ -78,7 +78,7 @@ class App(QWidget):
             input_field = self.sender()
             try:
                 num = float(text)
-                if num == int(num) and int(num) <= 200*10**6:
+                if num == int(num) and int(num) <= 300*10**6:
                     input_field.setStyleSheet("QLineEdit { background-color: white; }")
                     return 1
                 else:
